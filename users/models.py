@@ -8,15 +8,10 @@ class User(AbstractUser):
     username = None
 
     email = models.EmailField(
-        unique=True,
-        verbose_name="Почта",
-        help_text="Введите email"
+        unique=True, verbose_name="Почта", help_text="Введите email"
     )
     phone = models.CharField(
-        max_length=35,
-        verbose_name="Телефон",
-        help_text="Введите телефон",
-        **NULLABLE
+        max_length=35, verbose_name="Телефон", help_text="Введите телефон", **NULLABLE
     )
     city = models.CharField(
         max_length=100,
