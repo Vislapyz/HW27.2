@@ -1,7 +1,11 @@
 from rest_framework import generics, viewsets
 
 from materials.models import Course, Lesson
-from materials.serializer import CourseSerializer, LessonSerializer, CourseDetailSerializer
+from materials.serializer import (
+    CourseSerializer,
+    LessonSerializer,
+    CourseDetailSerializer,
+)
 
 
 class CourseView(viewsets.ModelViewSet):
