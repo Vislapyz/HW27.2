@@ -2,7 +2,7 @@ from django.urls import reverse
 from rest_framework import status
 from rest_framework.test import APITestCase
 
-from materials.models import Course, Lesson
+from materials.models import Course, Lesson, SubscriptionCourse
 from users.models import User
 
 
@@ -38,6 +38,7 @@ class LessonTestCase(APITestCase):
             "name_course": self.course.pk,
         }
         response = self.client.post(url, data)
+        print(response.json())
         # self.assertEqual(response.status_code, status.HTTP_201_CREATED)
         self.assertEqual(Lesson.objects.all().count(), 1)
 
@@ -53,4 +54,45 @@ class LessonTestCase(APITestCase):
         response = self.client.delete(url)
         self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
         self.assertEqual(Lesson.objects.all().count(), 0)
+
+    def test_lesson_list(self):
+        url = reverse("materials:lesson-list")
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(len(response.json()["results"]), 1)
+
+class SubscriptionTestCase(APITestCase):
+
+    def setUp(self):
+        self.user = User.objects.create(email="test@test.ru")
+        self.course = Course.objects.create(
+            name_course="Test Course", description="Test Course"
+        )
+        self.client.force_authenticate(user=self.user)
+        self.url = reverse("materials:subscription")
+
+    def test_subscription_create(self):
+        data = {"user": self.user.pk, "course": self.course.pk}
+        response = self.client.post(self.url, data)
+        temp_data = response.json()
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(temp_data.get("message"), "подписка добавлена")
+        self.assertEqual(SubscriptionCourse.objects.all().count(), 1)
+
+    def test_subscribe_delete(self):
+        SubscriptionCourse.objects.create(user=self.user, course=self.course)
+        data = {
+            "user": self.user.id,
+            "course": self.course.id,
+        }
+        response = self.client.post(self.url, data=data)
+        temp_data = response.json()
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(temp_data.get("message"), "подписка удалена")
+        self.assertEqual(SubscriptionCourse.objects.all().count(), 0)
+
+
+
+
+
 
