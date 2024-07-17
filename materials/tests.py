@@ -19,7 +19,6 @@ class LessonTestCase(APITestCase):
             name_course=self.course,
             owner=self.user,
         )
-
         self.client.force_authenticate(user=self.user)
 
     def test_lesson_retrieve(self):
@@ -27,3 +26,6 @@ class LessonTestCase(APITestCase):
         response = self.client.get(url)
         data = response.json()
         self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(data.get("name_ln"), self.lesson.name_ln)
+        self.assertEqual(data.get("name_course"), self.lesson.name_course.pk)
+
