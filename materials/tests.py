@@ -29,3 +29,28 @@ class LessonTestCase(APITestCase):
         self.assertEqual(data.get("name_ln"), self.lesson.name_ln)
         self.assertEqual(data.get("name_course"), self.lesson.name_course.pk)
 
+    def test_lesson_create(self):
+        url = reverse("materials:lesson-create")
+        data = {
+            "name_ln": "Test Lesson",
+            "description": "Test Lesson",
+            "link_video": "https://www.youtube.com/",
+            "name_course": self.course.pk,
+        }
+        response = self.client.post(url, data)
+        # self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+        self.assertEqual(Lesson.objects.all().count(), 1)
+
+    def test_lesson_update(self):
+        url = reverse("materials:lesson-update", args=(self.lesson.pk,))
+        data = {"name_ln": "Updated Test Lesson"}
+        response = self.client.put(url, data)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(Lesson.objects.get(pk=self.lesson.pk).name_ln, "Updated Test Lesson")
+
+    def test_lesson_delete(self):
+        url = reverse("materials:lesson-delete", args=(self.lesson.pk,))
+        response = self.client.delete(url)
+        self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
+        self.assertEqual(Lesson.objects.all().count(), 0)
+
