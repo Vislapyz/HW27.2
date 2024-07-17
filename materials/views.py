@@ -31,11 +31,11 @@ class CourseView(viewsets.ModelViewSet):
 
     def get_permissions(self):
 
-        if self.action == 'create':
+        if self.action == "create":
             self.permission_classes = (IsAuthenticated, ~IsModer)
-        elif self.action in ['list', 'retrieve', 'update']:
+        elif self.action in ["list", "retrieve", "update"]:
             self.permission_classes = (IsModer | IsOwner,)
-        elif self.action == 'destroy':
+        elif self.action == "destroy":
             self.permission_classes = (IsOwner | ~IsModer,)
 
 
@@ -76,15 +76,15 @@ class LessonDestroyAPIView(generics.DestroyAPIView):
 class SubscriptionCourseAPIView(APIView):
     def post(self, *args, **kwargs):
         user = self.request.user
-        course_id = self.request.data.get('course')
+        course_id = self.request.data.get("course")
         course_item = get_object_or_404(Course, pk=course_id)
 
         subs_item = SubscriptionCourse.objects.filter(user=user, course=course_item)
 
         if subs_item.exists():
             subs_item.delete()
-            message = 'подписка удалена'
+            message = "подписка удалена"
         else:
             SubscriptionCourse.objects.create(user=user, course=course_item)
-            message = 'подписка добавлена'
+            message = "подписка добавлена"
         return Response({"message": message})
