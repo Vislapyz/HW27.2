@@ -1,13 +1,13 @@
 import stripe
 
-from config.settings import STRIPE_API_KEY
+# from config.settings import STRIPE_API_KEY
 
-stripe.api_key = STRIPE_API_KEY
+stripe.api_key = "pk_test_51PeFk7AhQcegAgB7QeMfrN6EjVdoEHCWmhwIIRipCCzIKAUduledwk71vGff0HHmF8mCEMQWeuqQbP1LIvzJcxKO006uRtuNYC"
 
 
 def create_stripe_product(product):
     """Создает продукт в Stripe."""
-    product_name = f"{product.course}' if product.course else f'{product.lesson}"
+    product_name = f"{product.course}" if product.course else f"{product.lesson}"
     stripe_product = stripe.Product.create(name=f"{product_name}")
     return stripe_product["id"]
 
