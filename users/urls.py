@@ -12,10 +12,10 @@ from rest_framework_simplejwt.views import (
 app_name = UsersConfig.name
 router = DefaultRouter()
 router.register(r"user", UserViewSet, basename="user")
-
+router.register("payments", PaymentLiatAPIView)
 
 urlpatterns = [
-    path("payments/", PaymentLiatAPIView.as_view(), name="payments"),
+
     path(
         "token/",
         TokenObtainPairView.as_view(permission_classes=(AllowAny,)),
