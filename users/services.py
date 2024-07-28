@@ -1,8 +1,9 @@
 import stripe
 
-# from config.settings import STRIPE_API_KEY
+from config.settings import STRIPE_API_KEY
 
-stripe.api_key = "pk_test_51PeFk7AhQcegAgB7QeMfrN6EjVdoEHCWmhwIIRipCCzIKAUduledwk71vGff0HHmF8mCEMQWeuqQbP1LIvzJcxKO006uRtuNYC"
+
+stripe.api_key = STRIPE_API_KEY
 
 
 def create_stripe_product(product):
